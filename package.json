@@ -1,0 +1,28 @@
+{
+  "name": "wt_cw2_book_review",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start:watch": "node --watch ./src/main.js",
+    "start": "node ./src/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diyorbek31/WT_CW2_BOOK_REVIEW.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/diyorbek31/WT_CW2_BOOK_REVIEW/issues"
+  },
+  "homepage": "https://github.com/diyorbek31/WT_CW2_BOOK_REVIEW#readme",
+  "description": "",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
+    "express-validator": "^7.2.1",
+    "nodemon": "^3.1.9",
+    "pug": "^3.0.3"
+  }
+}
