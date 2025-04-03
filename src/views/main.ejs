@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Book Review App</title>
+        <link rel="stylesheet" href="/assets/css/style.css" />
+    </head>
+
+    <body>
+        <header class="container_single admin">
+            <h1>This web application was created to fulfill Web Technology module’s requirements and does not represent an actual company or service.</h1>
+        </header>
+
+        <!-- Add Book Form -->
+        <section class="container_single">
+            <form id="bookForm" action="/api/books" method="post" enctype="application/x-www-form-urlencoded">
+                <h2>Add a Book</h2>
+
+                <label for="title">Title</label>
+                <input name="title" id="title" type="text" placeholder="Enter book title" autocomplete="off" required />
+
+                <label for="author">Author</label>
+                <input name="author" id="author" type="text" placeholder="Enter author name" autocomplete="off" required />
+
+                <label for="genre">Genre</label>
+                <input name="genre" id="genre" type="text" placeholder="Enter book genre" autocomplete="off" required />
+
+                <button type="submit">Add Book</button>
+            </form>
+        </section>
+
+        <!-- Book List -->
+        <section class="container_single">
+            <h2>All Books</h2>
+            <div class="books">
+                <% allBooks.forEach((book) => { %>
+                    <div class="single_book" data-book-id="<%= book.id %>">
+                        <div class="book-title">
+                            <p><%= book.title %></p>
+                            <input type="text" class="edit-input" value="<%= book.title %>" style="display: none" aria-label="Edit book title" />
+                        </div>
+
+                        <div class="book-author">
+                            <p><%= book.author %></p>
+                            <input type="text" class="edit-input" value="<%= book.author %>" style="display: none" aria-label="Edit book author" />
+                        </div>
+
+                        <div class="book-genre">
+                            <p><%= book.genre %></p>
+                            <input type="text" class="edit-input" value="<%= book.genre %>" style="display: none" aria-label="Edit book genre" />
+                        </div>
+
+                        <div class="book-actions">
+                            <button class="edit-button">Edit</button>
+                            <button class="save-button" style="display: none">Save</button>
+                            <button class="delete-button">Delete</button>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        </section>
+
+        <script>
+            document.addEventListener("click", function (event) {
+                if (event.target.classList.contains("edit-button")) {
+                    const bookItem = event.target.closest(".single_book");
+                    const titleP = bookItem.querySelector(".book-title p");
+                    const titleInput = bookItem.querySelector(".book-title input");
+                    const authorP = bookItem.querySelector(".book-author p");
+                    const authorInput = bookItem.querySelector(".book-author input");
+                    const genreP = bookItem.querySelector(".book-genre p");
+                    const genreInput = bookItem.querySelector(".book-genre input");
+                    const saveButton = bookItem.querySelector(".save-button");
+
+                    titleP.style.display = "none";
+                    titleInput.style.display = "inline-block";
+                    authorP.style.display = "none";
+                    authorInput.style.display = "inline-block";
+                    genreP.style.display = "none";
+                    genreInput.style.display = "inline-block";
+                    event.target.style.display = "none";
+                    saveButton.style.display = "inline-block";
+
+                    saveButton.addEventListener("click", () => {
+                        const id = bookItem.getAttribute("data-book-id");
+                        fetch(`/api/books/${id}`, {
+                            method: "PUT",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                title: titleInput.value,
+                                author: authorInput.value,
+                                genre: genreInput.value
+                            })
+                        }).then(() => window.location.reload());
+                    });
+                }
+
+                if (event.target.classList.contains("delete-button")) {
+                    const bookItem = event.target.closest(".single_book");
+                    const id = bookItem.getAttribute("data-book-id");
+
+                    fetch(`/api/books/${id}`, { method: "DELETE" }).then(() => bookItem.remove());
+                }
+            });
+        </script>
+    </body>
+</html>
