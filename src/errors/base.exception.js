@@ -1,11 +1,6 @@
-import { BaseException } from "./base.exception.js"
-
-export class UnprocessableException extends BaseException {
-    constructor({ message, details }) {
+export class BaseException extends Error {
+    constructor(message) {
         super()
         this.message = message
-        this.status = 422
-        this.exception = 'UnprocessableException'
-        this.details = details
     }
 }

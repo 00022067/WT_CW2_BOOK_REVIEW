@@ -9,7 +9,7 @@ export default {
 
     CREATE_BOOK: (req, res) => {
         const { title, author, genre } = req.body;
-        console.log("📥 Incoming Data:", req.body);
+        console.log("Incoming Data:", req.body);
 
         if (!title || !author || !genre) {
             return res.status(400).json({ message: "All book fields are required" });
@@ -21,7 +21,7 @@ export default {
             return res.status(400).json({ message: "Book already exists" });
         } else {
             allBooks.push({
-                id: allBooks.at(-1)?.id + 1 || 1,
+                id: (allBooks.length > 0 ? allBooks.at(-1).id + 1 : 1),  
                 title,
                 author,
                 genre
@@ -41,12 +41,12 @@ export default {
         }
 
         const allBooks = readFileCustom("books.json");
-        const bookIndex = allBooks.findIndex((book) => book.id == +id);
+        const bookIndex = allBooks.findIndex((book) => book.id === Number(id)); //Fixed type mismatch
 
         if (bookIndex === -1) {
             return res.status(404).json({ message: "Book not found" });
         } else {
-            allBooks[bookIndex] = { id: +id, title, author, genre };
+            allBooks[bookIndex] = { id: Number(id), title, author, genre };
             writeFileCustom("books.json", allBooks);
             res.redirect("/api/main");
         }
@@ -55,7 +55,7 @@ export default {
     DELETE_BOOK: (req, res) => {
         const { id } = req.params;
         const allBooks = readFileCustom("books.json");
-        const bookIndex = allBooks.findIndex((book) => book.id == id);
+        const bookIndex = allBooks.findIndex((book) => book.id === Number(id)); // ✅ Fixed type mismatch
 
         if (bookIndex === -1) {
             return res.status(404).json({ message: "Book not found" });
